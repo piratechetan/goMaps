@@ -1,36 +1,7 @@
-import React,{Component,useState,useRef} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  Dimensions,
-  Pressable
-} from 'react-native';
-
-
+import {StyleSheet,Dimensions} from 'react-native'
 const {width,height} = Dimensions.get('window')
-const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.04;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-import RNGooglePlaces from 'react-native-google-places';
-import Home from './src/components/Home/index';
-const App = () => {
-  
-
-  return (
-      <View style={styles.maincontainer}>
-        <Home/>
-       </View>
-  );
-};
-
-const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     height: 400,
@@ -38,7 +9,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
- 
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor:'black'
+  },
   maincontainer:{
     flex:1,
     justifyContent:'flex-end'
@@ -75,6 +49,4 @@ const styles = StyleSheet.create({
     marginRight:15
   },
   
-});
-
-export default App;
+})
