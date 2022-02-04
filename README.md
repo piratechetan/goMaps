@@ -49,4 +49,5 @@ This Project is developed on Android. For more, refer to React-Native [Docs.](ht
 ## Tech Stack
 
 **Client:** React, React-Native ,React-Native libraries
+
 **services:** Google Cloud Platform,Google Maps Platform
