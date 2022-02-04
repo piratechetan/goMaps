@@ -11,21 +11,22 @@ import {
   Dimensions,
   Pressable
 } from 'react-native';
-
-import MapView,{PROVIDER_GOOGLE,Marker,AnimatedRegion} from 'react-native-maps';
+import MapView,{Marker} from 'react-native-maps';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import RNGooglePlaces from 'react-native-google-places';
 import MapViewDirections from 'react-native-maps-directions';
 import {mapDarkStyle} from '../../assets/model/mapstyle'
 import { GOOGLE_MAP_KEY } from '../../components/Constants/googleapi';
 import CustomBtn from '../../components/custom/custompin';
+import imagePath from '../Constants/imagePath'
+import styles from './styles'
+
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.06;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-import RNGooglePlaces from 'react-native-google-places';
-import imagePath from '../Constants/imagePath'
-import styles from './styles'
+
 const Home = () => {
   const [state, setState] = useState({
     curLoc: {
@@ -35,19 +36,24 @@ const Home = () => {
     
     
 })
-const { curLoc} = state
-   const [pickuplonglat, setpickuplonglat] = useState({
+// map default lat/long
+  const { curLoc} = state
+
+//pickup lat/long
+  const [pickuplonglat, setpickuplonglat] = useState({
       latitude: 13.033662,
       longitude: 80.184290,
    });
-   const [destinationlonglat, setdestinationlonglat] = useState({
+
+//destination lat/long
+  const [destinationlonglat, setdestinationlonglat] = useState({
     latitude: 13.032111,
     longitude: 80.179296,
  });
-   const [pickupaddress,setpickupaddress]=useState(null);
-   const [destinatiobnaddress,setdestinationaddress]=useState(null);
+  const [pickupaddress,setpickupaddress]=useState(null);
+  const [destinatiobnaddress,setdestinationaddress]=useState(null);
 
-   //pickup places 
+   //pickup place api function
    const openSearchModal = () =>{
      RNGooglePlaces.openAutocompleteModal()
      .then((place) => {
@@ -58,7 +64,7 @@ const { curLoc} = state
      .catch(error => console.log(error.message));  // error is a Javascript Error object
    }
    
-   // destination places
+   // destination place api function
    const openDestinationModal = () =>{
     RNGooglePlaces.openAutocompleteModal()
     .then((place) => {
@@ -74,15 +80,13 @@ const { curLoc} = state
       <View style={styles.maincontainer}>
         <StatusBar barStyle='light-content' backgroundColor={'#000'}/>
         <MapView
-          // remove if not using Google Maps
-       style={styles.map}
-       customMapStyle={mapDarkStyle}
-       
-       initialRegion={{
-        ...curLoc,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      }}
+           style={styles.map}
+           customMapStyle={mapDarkStyle}
+           initialRegion={{
+             ...curLoc,
+             latitudeDelta: LATITUDE_DELTA,
+             longitudeDelta: LONGITUDE_DELTA,
+            }}
      > 
      { pickupaddress ? 
      destinatiobnaddress ? 
@@ -95,6 +99,8 @@ const { curLoc} = state
      
    /> :
   null : null}
+
+  
         { pickupaddress ?
           <Marker.Animated coordinate={pickuplonglat}>
              <Image
@@ -122,10 +128,10 @@ const { curLoc} = state
      </MapView>
           <View style={styles.bottomcontainer}>
           <View style={styles.centeredcontainer}>
-            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15}}>
-              <View style={{marginLeft:10,flexDirection:'row',alignItems:'center'}}>
+            <View style={styles.bottomheader}>
+              <View style={styles.profilecontainer}>
                 <Image source={require('../../assets/PikPng.png')} style={styles.profilepic}/>
-                <Text style={{fontSize:16,color:'#fff',marginLeft:5}}>Max payne</Text>
+                <Text style={styles.name}>Max payne</Text>
               </View>
               <View style={{flexDirection:'row'}}>
                 <View style={styles.profilepic1}>
@@ -137,46 +143,46 @@ const { curLoc} = state
         
               </View>
             </View>
-            <View style={{width:'100%',height:1,backgroundColor:'#05120F',marginTop:15,alignSelf:'center'}}/>
+            <View style={styles.bottommaincontainer}/>
             <View>
               <View style={{flexDirection:'row',alignItems:'center'}}>
               <View style={{width:24,marginLeft:10}}>
               <Entypo name="location-pin" size={25} color={"red"}/>
-              <View style={{width:1,height:5,backgroundColor:'#65B77C',alignSelf:'center'}}/>
-              <View style={{width:1,height:5,backgroundColor:'#65B77C',alignSelf:'center',marginTop:3}}/>
+              <View style={styles.verticalline}/>
+              <View style={[styles.verticalline,{marginTop:3}]}/>
               </View>
         
                 <Pressable
           style={styles.button}
           onPress={() => openSearchModal()}
              >
-          <Text style={{color:'#2DAF95',fontSize:10,marginLeft:8,marginBottom:3}}>current location</Text>
+          <Text style={styles.pickuplocationtitle}>current location</Text>
           {pickupaddress ?
           (
-            <Text style={{color:'#FFFFFF',fontWeight:'600',fontSize:16,marginLeft:8}}>{pickupaddress.length <30 ? pickupaddress : pickupaddress.slice(0,36).concat('...')}</Text>
+            <Text style={styles.feededloc}>{pickupaddress.length <30 ? pickupaddress : pickupaddress.slice(0,36).concat('...')}</Text>
           ):(
-            <Text style={{color:'#556969',fontSize:16,marginLeft:8}}>Choose the pickup location</Text>
+            <Text style={styles.emptyloc}>Choose the pickup location</Text>
           )}
                 
           </Pressable>
                
               </View>
-              <View style={{flexDirection:'row',alignItems:'center',flexWrap:'nowrap'}}>
+              <View style={styles.destinationcontainer}>
               <View style={{width:24,marginLeft:10,marginTop:10}}>
                <CustomBtn />
-              <View style={{width:1,height:5,backgroundColor:'#65B77C',alignSelf:'center'}}/>
-              <View style={{width:1,height:5,backgroundColor:'#65B77C',alignSelf:'center',marginTop:3}}/>
+              <View style={styles.verticalline}/>
+              <View style={[styles.verticalline,{marginTop:3}]}/>
               </View>
               <Pressable
           style={{marginTop:20}}
           onPress={() => openDestinationModal()}
              >
-          <Text style={{color:'#556969',fontSize:10,marginLeft:8,marginBottom:3}}>Next Destination</Text>
+          <Text style={styles.destlocationtitle}>Next Destination</Text>
           {destinatiobnaddress ?
           (
-            <Text style={{color:'#FFFFFF',fontWeight:'600',fontSize:16,marginLeft:8}}>{destinatiobnaddress.length <30 ? destinatiobnaddress : destinatiobnaddress.slice(0,36).concat('...')}</Text>
+            <Text style={styles.feededloc}>{destinatiobnaddress.length <30 ? destinatiobnaddress : destinatiobnaddress.slice(0,36).concat('...')}</Text>
           ):(
-            <Text style={{color:'#556969',fontSize:16,marginLeft:8}}>Choose the destination location</Text>
+            <Text style={styles.emptyloc}>Choose the destination location</Text>
           )}
                 
           </Pressable>
